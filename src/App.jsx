@@ -96,7 +96,7 @@ const App = () => {
       63: ['T13 D12', 'T11 D15'], 62: ['T10 D16', 'T14 D10'], 61: ['T15 D8', 'T11 D14'], 60: ['20 D20', '10 BULL', 'D10 D20', 'D20 D10'],
       59: ['19 D20', '11 BULL'], 58: ['18 D20', '10 D24'], 57: ['17 D20', '9 BULL'], 56: ['16 D20', 'T16 D4', 'D18 D10'],
       55: ['15 D20', '7 BULL'], 54: ['14 D20', '10 D22'], 53: ['13 D20', '5 BULL'], 52: ['12 D20', '20 D16', 'D16 D10'],
-      51: ['11 D20', '19 D16'], 50: ['D25', '10 D20', '18 D16'], 49: ['9 D20', '17 D16'], 48: ['16 D16', '8 D20', 'D12 D12'],
+      51: ['11 D20', '19 D16'], 50: ['BULL', '10 D20', '18 D16'], 49: ['9 D20', '17 D16'], 48: ['16 D16', '8 D20', 'D12 D12'],
       47: ['7 D20', '15 D16'], 46: ['6 D20', '14 D16', '10 D18'], 45: ['5 D20', '13 D16'], 44: ['12 D16', '4 D20', 'D11 D11'],
       43: ['3 D20', '11 D16'], 42: ['10 D16', '6 D18'], 41: ['9 D16', '5 D18'], 40: ['D20', '20 D10'],
       39: ['7 D16', '19 D10'], 38: ['D19', '2 D18'], 37: ['5 D16', '17 D10', '1 D18'], 36: ['D18', '4 D16'],
@@ -122,17 +122,14 @@ const App = () => {
     if (turnThrows.length >= 3 || winner !== null) return;
 
     if (value === 0 && multiplier !== 1) {
-      setMessage('Miss (0) kann kein Doppel/Triple sein!');
       setMultiplier(1);
       return;
     }
-    if (value === 25 && multiplier === 3) {
-      setMessage('Triple 25 existiert nicht!');
+    if (value === 25 && multiplier > 1) {
       setMultiplier(1);
       return;
     }
     if (value === 50 && multiplier !== 1) {
-      setMessage('Bullseye ist bereits ein Doppel-Feld!');
       setMultiplier(1);
       return;
     }
@@ -140,10 +137,7 @@ const App = () => {
     let finalValue = value * multiplier;
     let isDouble = multiplier === 2;
 
-    if (value === 25) {
-      finalValue = 25 * multiplier;
-      isDouble = multiplier === 2;
-    } else if (value === 50) {
+    if (value === 50) {
       finalValue = 50;
       isDouble = true;
     }
