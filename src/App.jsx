@@ -57,16 +57,49 @@ const App = () => {
   const getCheckoutSuggestion = (score) => {
     if (score > 170 || score < 2) return null;
     const checkouts = {
-      170: 'T20 T20 BULL', 167: 'T20 T19 BULL', 164: 'T20 T18 BULL', 161: 'T20 T17 BULL',
-      160: 'T20 T20 D20', 158: 'T20 T20 D19', 157: 'T20 T19 D20', 156: 'T20 T20 D18',
-      155: 'T20 T19 D19', 154: 'T20 T18 D20', 153: 'T20 T19 D18', 152: 'T20 T20 D16',
-      151: 'T20 T17 D20', 150: 'T20 T18 D18', 149: 'T20 T19 D16', 148: 'T20 T16 D20',
-      147: 'T20 T17 D18', 146: 'T20 T18 D16', 145: 'T20 T15 D20', 144: 'T20 T20 D12',
-      143: 'T20 T17 D16', 142: 'T20 T14 D20', 141: 'T20 T15 D18', 140: 'T20 T20 D10',
-      130: 'T20 T20 D5', 121: 'T20 11 BULL', 100: 'T20 D20', 90: 'T18 D18', 80: 'T20 D10',
-      70: 'T10 D20', 60: '20 D20', 50: '10 D20', 40: 'D20', 32: 'D16', 24: 'D12', 20: 'D10', 16: 'D8', 10: 'D5', 8: 'D4', 4: 'D2', 2: 'D1'
+      170: ['T20 T20 BULL'], 167: ['T20 T19 BULL'], 164: ['T20 T18 BULL'], 161: ['T20 T17 BULL'],
+      160: ['T20 T20 D20'], 158: ['T20 T20 D19'], 157: ['T20 T19 D20'], 156: ['T20 T20 D18'],
+      155: ['T20 T19 D19'], 154: ['T20 T18 D20'], 153: ['T20 T19 D18'], 152: ['T20 T20 D16'],
+      151: ['T20 T17 D20'], 150: ['T20 T18 D18'], 149: ['T20 T19 D16'], 148: ['T20 T16 D20'],
+      147: ['T20 T17 D18'], 146: ['T20 T18 D16'], 145: ['T20 T15 D20'], 144: ['T20 T20 D12'],
+      143: ['T20 T17 D16'], 142: ['T20 T14 D20'], 141: ['T20 T15 D18'], 140: ['T20 T20 D10'],
+      139: ['T19 T14 D20'], 138: ['T20 T18 D12'], 137: ['T17 T18 D16', 'T19 T20 D10'], 136: ['T20 T20 D8'],
+      135: ['T20 T15 D15', '25 T20 BULL'], 134: ['T20 T14 D16'], 133: ['T20 T19 D8'], 132: ['T20 T16 D12', 'T19 T15 D15'],
+      131: ['T20 T13 D16'], 130: ['T20 T18 D8', 'T20 T20 D5'], 129: ['T19 T16 D12'], 128: ['T18 T14 D16'],
+      127: ['T20 T17 D8'], 126: ['T19 T19 D6'], 125: ['25 T20 D20', 'T20 T15 D10'], 124: ['T20 T16 D8'],
+      123: ['T19 T16 D9'], 122: ['T18 T20 D4'], 121: ['T20 T15 D8', 'T20 11 BULL'], 120: ['T20 20 D20', 'T20 T20 D0'],
+      119: ['T19 T10 D16'], 118: ['T20 18 D20'], 117: ['T20 17 D20'], 116: ['T20 16 D20'],
+      115: ['T20 15 D20'], 114: ['T20 14 D20'], 113: ['T19 16 D20'], 112: ['T20 12 D20'],
+      111: ['T20 11 D20'], 110: ['T20 10 D20'], 109: ['T19 12 D20'], 108: ['T20 16 D16'],
+      107: ['T19 10 D20'], 106: ['T20 10 D18'], 105: ['T19 8 D20'], 104: ['T18 10 D20'],
+      103: ['T19 6 D20'], 102: ['T20 10 D16'], 101: ['T17 10 D20'], 100: ['T20 D20'],
+      99: ['T19 10 D16'], 98: ['T20 D19', 'T16 T16 D2'], 97: ['T19 D20', 'T17 D23'], 96: ['T20 D18', 'T16 D24'],
+      95: ['T19 D19'], 94: ['T18 D20', 'T16 D23'], 93: ['T19 D18'], 92: ['T20 D16', 'T16 D22'],
+      91: ['T17 D20'], 90: ['T18 D18', 'T20 D15'], 89: ['T19 D16'], 88: ['T16 D20', 'T20 D14'],
+      87: ['T17 D18'], 86: ['T18 D16'], 85: ['T15 D20', 'T19 D14'], 84: ['T20 D12', 'T16 D18'],
+      83: ['T17 D16'], 82: ['T14 D20', 'T10 BULL'], 81: ['T19 D12', 'T15 D18'], 80: ['T20 D10', 'T16 D16'],
+      79: ['T13 D20', 'T19 D11'], 78: ['T18 D12', 'T14 D18'], 77: ['T15 D16', 'T19 D10'], 76: ['T20 D8', 'T16 D14'],
+      75: ['T17 D12', 'T15 D15'], 74: ['T14 D16', 'T18 D10'], 73: ['T19 D8', 'T15 D14'], 72: ['T16 D12', 'T12 D18'],
+      71: ['T13 D16', 'T17 D10'], 70: ['T10 D20', 'T18 D8'], 69: ['T15 D12', 'T19 D6'], 68: ['T16 D10', 'T12 D16'],
+      67: ['T17 D8', 'T13 D14'], 66: ['T10 D18', 'T14 D12'], 65: ['T19 D4', 'T15 D10'], 64: ['T16 D8', 'T8 D20'],
+      63: ['T13 D12', 'T11 D15'], 62: ['T10 D16', 'T14 D10'], 61: ['T15 D8', 'T11 D14'], 60: ['20 D20', '10 BULL'],
+      59: ['19 D20', '11 BULL'], 58: ['18 D20', '10 D24'], 57: ['17 D20', '9 BULL'], 56: ['16 D20', 'T16 D4'],
+      55: ['15 D20', '7 BULL'], 54: ['14 D20', '10 D22'], 53: ['13 D20', '5 BULL'], 52: ['12 D20', '20 D16'],
+      51: ['11 D20', '19 D16'], 50: ['10 D20', '18 D16', 'BULL'], 49: ['9 D20', '17 D16'], 48: ['8 D20', '16 D16'],
+      47: ['7 D20', '15 D16'], 46: ['6 D20', '14 D16', '10 D18'], 45: ['5 D20', '13 D16'], 44: ['4 D20', '12 D16'],
+      43: ['3 D20', '11 D16'], 42: ['10 D16', '6 D18'], 41: ['9 D16', '5 D18'], 40: ['D20', '20 D10'],
+      39: ['7 D16', '19 D10'], 38: ['D19', '2 D18'], 37: ['5 D16', '17 D10', '1 D18'], 36: ['D18', '4 D16'],
+      35: ['3 D16', '19 D8'], 34: ['D17', '2 D16'], 33: ['1 D16', '17 D8'], 32: ['D16', '8 D12'],
+      31: ['7 D12', '15 D8'], 30: ['D15', '10 D10', '6 D12'], 29: ['13 D8', '9 D10'], 28: ['D14', '12 D8', '4 D12'],
+      27: ['11 D8', '7 D10'], 26: ['D13', '10 D8', '2 D12'], 25: ['9 D8', '17 D4'], 24: ['D12', '8 D8'],
+      23: ['7 D8', '15 D4'], 22: ['D11', '6 D8', '2 D10'], 21: ['5 D8', '13 D4'], 20: ['D10', '4 D8'],
+      19: ['3 D8', '11 D4'], 18: ['D9', '2 D8'], 17: ['1 D8', '9 D4'], 16: ['D8', '8 D4'],
+      15: ['7 D4', '11 D2'], 14: ['D7', '6 D4', '2 D6'], 13: ['5 D4', '9 D2'], 12: ['D6', '4 D4'],
+      11: ['3 D4', '7 D2'], 10: ['D5', '2 D4'], 9: ['1 D4', '5 D2'], 8: ['D4', '4 D2'],
+      7: ['3 D2', '1 D3'], 6: ['D3', '2 D2'], 5: ['1 D2', '3 D1'], 4: ['D2', '2 D1'],
+      3: ['1 D1'], 2: ['D1']
     };
-    return checkouts[score] || 'Suchen...';
+    return checkouts[score] || null;
   };
 
   const handleScoreClick = (value) => {
@@ -393,23 +426,34 @@ const App = () => {
         </div>
       </header>
 
-      {/* Checkout Suggestion */}
+      {/* Checkout Suggestions */}
       {!isNoobMode && suggestion && (
-        <div className="w-full bg-amber-500/10 border border-amber-500/20 rounded-2xl p-3 flex items-center justify-between animate-in slide-in-from-top-2 duration-500">
-          <div className="flex items-center gap-3">
-            <div className="bg-amber-500 p-2 rounded-xl"><Target size={16} className="text-zinc-900" /></div>
-            <div>
-              <div className="text-[8px] font-black uppercase text-amber-500 tracking-widest">Finish</div>
-              <div className="text-sm font-black text-white tracking-wide">{suggestion}</div>
-            </div>
+        <div className="w-full bg-amber-500/10 border border-amber-500/20 rounded-2xl p-3 flex flex-col gap-2 animate-in slide-in-from-top-2 duration-500">
+          <div className="flex items-center gap-2 mb-1">
+            <Target size={14} className="text-amber-500" />
+            <span className="text-[8px] font-black uppercase text-amber-500 tracking-widest">Finishes</span>
+          </div>
+          <div className="flex gap-2 overflow-x-auto pb-1 custom-scrollbar">
+            {suggestion.map((opt, i) => (
+              <div key={i} className="bg-zinc-900/80 border border-zinc-700 px-3 py-2 rounded-xl whitespace-nowrap">
+                <span className="text-xs font-black text-white tracking-wide">{opt}</span>
+              </div>
+            ))}
           </div>
         </div>
       )}
 
-      {/* Dynamic Player Grid */}
-      <div className={`grid gap-3 w-full ${playerNames.length > 2 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+      {/* Horizontal Player Row */}
+      <div className="flex gap-3 w-full overflow-x-auto pb-2 custom-scrollbar snap-x">
         {playerNames.map((name, idx) => (
-          <div key={idx} className={`p-4 rounded-2xl border-2 transition-all duration-300 ${currentPlayer === idx ? 'border-amber-500 bg-amber-500/10 scale-[1.02]' : 'border-zinc-800 bg-zinc-800/30 opacity-40'}`}>
+          <div 
+            key={idx} 
+            className={`flex-shrink-0 min-w-[140px] p-4 rounded-2xl border-2 transition-all duration-300 snap-center ${
+              currentPlayer === idx 
+                ? 'border-amber-500 bg-amber-500/10 scale-[1.02]' 
+                : 'border-zinc-800 bg-zinc-800/30 opacity-40'
+            }`}
+          >
             <div className="flex items-center gap-2 mb-1 text-[10px] font-black uppercase tracking-widest text-zinc-500 truncate">
               {currentPlayer === idx && <Award size={10} className="text-amber-500" />} {name}
             </div>
