@@ -19,6 +19,17 @@ const App = () => {
   const [turnThrows, setTurnThrows] = useState([]);
   const [multiplier, setMultiplier] = useState(1);
   const [winner, setWinner] = useState(null);
+  const playerRefs = React.useRef([]);
+
+  useEffect(() => {
+    if (gameStarted && playerRefs.current[currentPlayer]) {
+      playerRefs.current[currentPlayer].scrollIntoView({
+        behavior: 'smooth',
+        inline: 'center',
+        block: 'nearest'
+      });
+    }
+  }, [currentPlayer, gameStarted]);
 
   const dartValues = Array.from({ length: 20 }, (_, i) => i + 1);
 
@@ -54,8 +65,8 @@ const App = () => {
     setPlayerNames(next);
   };
 
-  const getCheckoutSuggestion = (score) => {
-    if (score > 170 || score < 2) return null;
+  const getCheckoutSuggestion = (score, dartsLeft) => {
+    if (score > 170 || score < 2 || dartsLeft < 1) return null;
     const checkouts = {
       170: ['T20 T20 BULL'], 167: ['T20 T19 BULL'], 164: ['T20 T18 BULL'], 161: ['T20 T17 BULL'],
       160: ['T20 T20 D20'], 158: ['T20 T20 D19'], 157: ['T20 T19 D20'], 156: ['T20 T20 D18'],
@@ -67,31 +78,31 @@ const App = () => {
       135: ['T20 T15 D15', '25 T20 BULL'], 134: ['T20 T14 D16'], 133: ['T20 T19 D8'], 132: ['T20 T16 D12', 'T19 T15 D15'],
       131: ['T20 T13 D16'], 130: ['T20 T18 D8', 'T20 T20 D5'], 129: ['T19 T16 D12'], 128: ['T18 T14 D16'],
       127: ['T20 T17 D8'], 126: ['T19 T19 D6'], 125: ['25 T20 D20', 'T20 T15 D10'], 124: ['T20 T16 D8'],
-      123: ['T19 T16 D9'], 122: ['T18 T20 D4'], 121: ['T20 T15 D8', 'T20 11 BULL'], 120: ['T20 20 D20', 'T20 T20 D0'],
+      123: ['T19 T16 D9'], 122: ['T18 T20 D4'], 121: ['T20 T15 D8', 'T20 11 BULL'], 120: ['T20 20 D20'],
       119: ['T19 T10 D16'], 118: ['T20 18 D20'], 117: ['T20 17 D20'], 116: ['T20 16 D20'],
       115: ['T20 15 D20'], 114: ['T20 14 D20'], 113: ['T19 16 D20'], 112: ['T20 12 D20'],
       111: ['T20 11 D20'], 110: ['T20 10 D20'], 109: ['T19 12 D20'], 108: ['T20 16 D16'],
       107: ['T19 10 D20'], 106: ['T20 10 D18'], 105: ['T19 8 D20'], 104: ['T18 10 D20'],
-      103: ['T19 6 D20'], 102: ['T20 10 D16'], 101: ['T17 10 D20'], 100: ['T20 D20'],
-      99: ['T19 10 D16'], 98: ['T20 D19', 'T16 T16 D2'], 97: ['T19 D20', 'T17 D23'], 96: ['T20 D18', 'T16 D24'],
-      95: ['T19 D19'], 94: ['T18 D20', 'T16 D23'], 93: ['T19 D18'], 92: ['T20 D16', 'T16 D22'],
+      103: ['T19 6 D20'], 102: ['T20 10 D16'], 101: ['T17 10 D20'], 100: ['T20 D20', 'D20 D20 D10'],
+      99: ['T19 10 D16'], 98: ['T20 D19', 'T16 T16 D2'], 97: ['T19 D20'], 96: ['T20 D18', 'T16 D24'],
+      95: ['T19 D19'], 94: ['T18 D20'], 93: ['T19 D18'], 92: ['T20 D16'],
       91: ['T17 D20'], 90: ['T18 D18', 'T20 D15'], 89: ['T19 D16'], 88: ['T16 D20', 'T20 D14'],
       87: ['T17 D18'], 86: ['T18 D16'], 85: ['T15 D20', 'T19 D14'], 84: ['T20 D12', 'T16 D18'],
-      83: ['T17 D16'], 82: ['T14 D20', 'T10 BULL'], 81: ['T19 D12', 'T15 D18'], 80: ['T20 D10', 'T16 D16'],
+      83: ['T17 D16'], 82: ['T14 D20', 'T10 BULL'], 81: ['T19 D12', 'T15 D18'], 80: ['T20 D10', 'T16 D16', 'D20 D20'],
       79: ['T13 D20', 'T19 D11'], 78: ['T18 D12', 'T14 D18'], 77: ['T15 D16', 'T19 D10'], 76: ['T20 D8', 'T16 D14'],
       75: ['T17 D12', 'T15 D15'], 74: ['T14 D16', 'T18 D10'], 73: ['T19 D8', 'T15 D14'], 72: ['T16 D12', 'T12 D18'],
-      71: ['T13 D16', 'T17 D10'], 70: ['T10 D20', 'T18 D8'], 69: ['T15 D12', 'T19 D6'], 68: ['T16 D10', 'T12 D16'],
-      67: ['T17 D8', 'T13 D14'], 66: ['T10 D18', 'T14 D12'], 65: ['T19 D4', 'T15 D10'], 64: ['T16 D8', 'T8 D20'],
-      63: ['T13 D12', 'T11 D15'], 62: ['T10 D16', 'T14 D10'], 61: ['T15 D8', 'T11 D14'], 60: ['20 D20', '10 BULL'],
-      59: ['19 D20', '11 BULL'], 58: ['18 D20', '10 D24'], 57: ['17 D20', '9 BULL'], 56: ['16 D20', 'T16 D4'],
-      55: ['15 D20', '7 BULL'], 54: ['14 D20', '10 D22'], 53: ['13 D20', '5 BULL'], 52: ['12 D20', '20 D16'],
-      51: ['11 D20', '19 D16'], 50: ['10 D20', '18 D16', 'BULL'], 49: ['9 D20', '17 D16'], 48: ['8 D20', '16 D16'],
-      47: ['7 D20', '15 D16'], 46: ['6 D20', '14 D16', '10 D18'], 45: ['5 D20', '13 D16'], 44: ['4 D20', '12 D16'],
+      71: ['T13 D16', 'T17 D10'], 70: ['T10 D20', 'T18 D8', 'D15 D20'], 69: ['T15 D12', 'T19 D6'], 68: ['T16 D10', 'T12 D16'],
+      67: ['T17 D8', 'T13 D14'], 66: ['T10 D18', 'T14 D12'], 65: ['T19 D4', 'T15 D10'], 64: ['T16 D8', 'T8 D20', 'D16 D16'],
+      63: ['T13 D12', 'T11 D15'], 62: ['T10 D16', 'T14 D10'], 61: ['T15 D8', 'T11 D14'], 60: ['20 D20', '10 BULL', 'D10 D20', 'D20 D10'],
+      59: ['19 D20', '11 BULL'], 58: ['18 D20', '10 D24'], 57: ['17 D20', '9 BULL'], 56: ['16 D20', 'T16 D4', 'D18 D10'],
+      55: ['15 D20', '7 BULL'], 54: ['14 D20', '10 D22'], 53: ['13 D20', '5 BULL'], 52: ['12 D20', '20 D16', 'D16 D10'],
+      51: ['11 D20', '19 D16'], 50: ['D25', '10 D20', '18 D16'], 49: ['9 D20', '17 D16'], 48: ['16 D16', '8 D20', 'D12 D12'],
+      47: ['7 D20', '15 D16'], 46: ['6 D20', '14 D16', '10 D18'], 45: ['5 D20', '13 D16'], 44: ['12 D16', '4 D20', 'D11 D11'],
       43: ['3 D20', '11 D16'], 42: ['10 D16', '6 D18'], 41: ['9 D16', '5 D18'], 40: ['D20', '20 D10'],
       39: ['7 D16', '19 D10'], 38: ['D19', '2 D18'], 37: ['5 D16', '17 D10', '1 D18'], 36: ['D18', '4 D16'],
       35: ['3 D16', '19 D8'], 34: ['D17', '2 D16'], 33: ['1 D16', '17 D8'], 32: ['D16', '8 D12'],
       31: ['7 D12', '15 D8'], 30: ['D15', '10 D10', '6 D12'], 29: ['13 D8', '9 D10'], 28: ['D14', '12 D8', '4 D12'],
-      27: ['11 D8', '7 D10'], 26: ['D13', '10 D8', '2 D12'], 25: ['9 D8', '17 D4'], 24: ['D12', '8 D8'],
+      27: ['11 D8', '7 D10'], 26: ['D13', '10 D8', '2 D12'], 25: ['9 D8', '17 D4', '1 BULL'], 24: ['D12', '8 D8'],
       23: ['7 D8', '15 D4'], 22: ['D11', '6 D8', '2 D10'], 21: ['5 D8', '13 D4'], 20: ['D10', '4 D8'],
       19: ['3 D8', '11 D4'], 18: ['D9', '2 D8'], 17: ['1 D8', '9 D4'], 16: ['D8', '8 D4'],
       15: ['7 D4', '11 D2'], 14: ['D7', '6 D4', '2 D6'], 13: ['5 D4', '9 D2'], 12: ['D6', '4 D4'],
@@ -99,7 +110,12 @@ const App = () => {
       7: ['3 D2', '1 D3'], 6: ['D3', '2 D2'], 5: ['1 D2', '3 D1'], 4: ['D2', '2 D1'],
       3: ['1 D1'], 2: ['D1']
     };
-    return checkouts[score] || null;
+
+    const suggestions = checkouts[score] || [];
+    // Filtere Finishes, die mehr Pfeile benötigen als übrig sind
+    const possible = suggestions.filter(s => s.split(' ').length <= dartsLeft);
+    
+    return possible.length > 0 ? possible : null;
   };
 
   const handleScoreClick = (value) => {
@@ -268,7 +284,7 @@ const App = () => {
   };
 
   const currentRemaining = scores[currentPlayer] - turnThrows.reduce((a, b) => a + b.val, 0);
-  const suggestion = getCheckoutSuggestion(currentRemaining);
+  const suggestion = getCheckoutSuggestion(currentRemaining, 3 - turnThrows.length);
 
   const colors = ["#f59e0b", "#3b82f6", "#ef4444", "#10b981", "#8b5cf6", "#71717a"];
   const maxTurns = Math.max(...scoreHistory.map(h => h.length));
@@ -388,13 +404,36 @@ const App = () => {
                 <LineChart data={chartData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#18181b" />
                   <XAxis dataKey="turn" hide />
-                  <YAxis domain={[0, startScore]} hide />
+                  <YAxis 
+                    domain={[0, startScore]} 
+                    stroke="#52525b" 
+                    fontSize={10} 
+                    fontWeight="bold" 
+                    tickLine={false} 
+                    axisLine={false} 
+                    width={25}
+                  />
                   <Tooltip 
                     contentStyle={{ backgroundColor: '#09090b', borderColor: '#27272a', borderRadius: '16px', fontSize: '10px', fontWeight: 'bold' }} 
                     itemStyle={{ padding: '0px' }}
                   />
+                  <Legend 
+                    verticalAlign="bottom" 
+                    align="center" 
+                    iconType="circle"
+                    wrapperStyle={{ paddingTop: '10px', fontSize: '9px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.05em' }}
+                  />
                   {playerNames.map((name, i) => (
-                    <Line key={name} type="monotone" dataKey={name} stroke={colors[i % colors.length]} strokeWidth={4} dot={false} animationDuration={1500} />
+                    <Line 
+                      key={name} 
+                      type="monotone" 
+                      dataKey={name} 
+                      stroke={colors[i % colors.length]} 
+                      strokeWidth={3} 
+                      dot={{ r: 4, strokeWidth: 2, fill: '#09090b' }} 
+                      activeDot={{ r: 6 }} 
+                      animationDuration={1500} 
+                    />
                   ))}
                 </LineChart>
               </ResponsiveContainer>
@@ -448,6 +487,7 @@ const App = () => {
         {playerNames.map((name, idx) => (
           <div 
             key={idx} 
+            ref={el => playerRefs.current[idx] = el}
             className={`flex-shrink-0 min-w-[140px] p-4 rounded-2xl border-2 transition-all duration-300 snap-center ${
               currentPlayer === idx 
                 ? 'border-amber-500 bg-amber-500/10 scale-[1.02]' 
